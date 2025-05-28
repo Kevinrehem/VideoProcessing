@@ -97,10 +97,14 @@ public class VideoProcessing {
         escritor.release(); //limpando o buffer 
     }
 
+    public static void removerSalPimenta(byte pixels[][][]){
+
+    }
+
     public static void main(String[] args) {
 
-        String caminhoVideo = "D:\\Download\\video.mp4";
-        String caminhoGravar = "D:\\Download\\video2.mp4";
+        String caminhoVideo = "lib\\video-trimmed.mp4";
+        String caminhoGravar = "lib\\video-clean.mp4";
         double fps = 21.0; //isso deve mudar se for outro vídeo (avaliar metadados ???)
 
         System.out.println("Carregando o vídeo... " + caminhoVideo);
@@ -110,7 +114,7 @@ public class VideoProcessing {
                 pixels.length, pixels[0][0].length, pixels[0].length);
 
         System.out.println("processamento remove ruído 1");
-        //removerSalPimenta(pixels); //voce deve implementar esta funcao
+        removerSalPimenta(pixels); //voce deve implementar esta funcao
         
         System.out.println("processamento remove ruído 2");
         //removerBorroesTempo(pixels); //voce deve implementar esta funcao
