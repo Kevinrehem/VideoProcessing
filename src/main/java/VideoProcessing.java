@@ -98,6 +98,7 @@ public class VideoProcessing {
     }
 
     public static void removerSalPimenta(byte pixels[][][]){
+
         SaltPepperCleaner.loadFrames(pixels);
     }
 
