@@ -29,7 +29,6 @@ public class SaltPepperCleaner extends Thread{
             if(j+1<currentFrame[i].length) pixels.add(currentFrame[i-1][j+1]);
         }
         Collections.sort(pixels);
-
         return pixels;
     }
 
@@ -57,7 +56,9 @@ public class SaltPepperCleaner extends Thread{
                 if(this.currentFrame[i][j] < mediana-24 || this.currentFrame[i][j] > mediana+24) this.currentFrame[i][j] = mediana;
             }
         }
-        fixedFrames.add(this.currentFrame);
+        synchronized (key){
+            fixedFrames.add(this.currentFrame);
+        }
     }
 
 
