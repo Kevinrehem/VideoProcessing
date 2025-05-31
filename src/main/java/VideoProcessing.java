@@ -100,6 +100,12 @@ public class VideoProcessing {
     public static void removerSalPimenta(byte pixels[][][]){
 
         SaltPepperCleaner.loadFrames(pixels);
+
+        SaltPepperCleaner vetCores[] = new SaltPepperCleaner[Runtime.getRuntime().availableProcessors()];
+        for(int i = 0; i < vetCores.length; i++){
+            vetCores[i] = new SaltPepperCleaner();
+            vetCores[i].start();
+        }
     }
 
     public static void main(String[] args) {
@@ -116,6 +122,7 @@ public class VideoProcessing {
 
         System.out.println("processamento remove ruído 1");
         removerSalPimenta(pixels); //voce deve implementar esta funcao
+
         
         System.out.println("processamento remove ruído 2");
         //removerBorroesTempo(pixels); //voce deve implementar esta funcao
