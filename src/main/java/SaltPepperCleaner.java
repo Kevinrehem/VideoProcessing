@@ -72,20 +72,22 @@ public class SaltPepperCleaner extends Thread {
     }*/
 
     //Método para tratar o frame atual, percorre a matriz de bytes e corrige os s
-    private void treatFrame() {
+    private byte[][] treatFrame() {
+        byte[][] frameResult = new byte[currentFrame.length][currentFrame[0].length];
         this.currentFrame = taskBag.removeFirst();
         List<Byte> neighbours = new ArrayList<>();
         for (int i = 0; i < this.currentFrame.length; i++) {
             for (int j = 0; j < this.currentFrame[i].length; j++) {
                 neighbours = getNeighbours(this.currentFrame, i, j);
                 byte mediana = calcMediana(neighbours);
-                if (this.currentFrame[i][j] < mediana - 24 || this.currentFrame[i][j] > mediana + 24)
-                    this.currentFrame[i][j] = mediana;
+                if (this.currentFrame[i][j] < mediana - 24 || this.currentFrame[i][j] > mediana + 24){
+                   frameResult[i][j] = mediana;
+                }else {
+                    frameResult[i][j] = this.currentFrame[i][j];
+                }
             }
         }
-        synchronized (key) {
-            fixedFrames.add(this.currentFrame);
-        }
+        return frameResult;
     }
 
 
