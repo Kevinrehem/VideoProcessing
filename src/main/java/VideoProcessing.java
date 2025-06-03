@@ -116,14 +116,14 @@ public class VideoProcessing {
             }
         }
 
-        boolean isActive = false;
+        /*boolean isActive = false;
         do{
             for (int i=0;i< vetCores.length; i++){
                 if (vetCores[i].isAlive()){
                     isActive=true;
                 }
             }
-        }while (!isActive);
+        }while (!isActive);*/
         result = SaltPepperCleaner.getFixedFrames();
         return result;
     }

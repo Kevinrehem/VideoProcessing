@@ -53,21 +53,6 @@ public class SaltPepperCleaner extends Thread {
         }
     }
 
-    /*private byte calcMediana(List<Byte> pixels) {
-
-        byte mediana = 0;
-        if(!pixels.isEmpty()) {
-            int meio = pixels.size() / 2;
-            meio--;
-
-            if (pixels.size() % 2 == 0) {
-                mediana = (byte) ((pixels.get(meio) + pixels.get(meio + 1)) / 2);
-            } else {
-                mediana = (byte) (pixels.get(meio));
-            }
-        }
-        return mediana;
-    }*/
 
     //Método para tratar o frame atual, percorre a matriz de bytes e corrige os s
     private byte[][] treatFrame() {
@@ -106,18 +91,17 @@ public class SaltPepperCleaner extends Thread {
 
     @Override
     public void run() {
-        boolean running = true;
-        while (running){
-            while (!taskBag.isEmpty()){
-                synchronized (taskBag){
-                    if(!taskBag.isEmpty()){
-                        this.currentFrame = taskBag.removeFirst();
-                        fixedFrames.add(this.treatFrame());
-                    }else {
-                        running = false;
-                    }
+        while (!taskBag.isEmpty()){
+            synchronized (taskBag){
+                if(!taskBag.isEmpty()){
+                    this.currentFrame = taskBag.removeFirst();
+                    System.out.println(taskBag.size());
                 }
             }
+            if(currentFrame!=null){
+                fixedFrames.add(this.treatFrame());
+            }
+            this.currentFrame=null;
         }
     }
 }
