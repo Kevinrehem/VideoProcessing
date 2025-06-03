@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.util.*;
 
 public class SaltPepperCleaner extends Thread {
@@ -70,7 +71,6 @@ public class SaltPepperCleaner extends Thread {
 
     //Método para tratar o frame atual, percorre a matriz de bytes e corrige os s
     private byte[][] treatFrame() {
-        this.currentFrame = taskBag.removeFirst();
         byte[][] frameResult = new byte[currentFrame.length][currentFrame[0].length];
         List<Byte> neighbours = new ArrayList<>();
         for (int i = 0; i < this.currentFrame.length; i++) {
@@ -106,13 +106,18 @@ public class SaltPepperCleaner extends Thread {
 
     @Override
     public void run() {
-        while (!taskBag.isEmpty()){
-            synchronized (taskBag){
-                if(!taskBag.isEmpty()){
-                    fixedFrames.add(this.treatFrame());
+        boolean running = true;
+        while (running){
+            while (!taskBag.isEmpty()){
+                synchronized (taskBag){
+                    if(!taskBag.isEmpty()){
+                        this.currentFrame = taskBag.removeFirst();
+                        fixedFrames.add(this.treatFrame());
+                    }else {
+                        running = false;
+                    }
                 }
             }
         }
-
     }
 }

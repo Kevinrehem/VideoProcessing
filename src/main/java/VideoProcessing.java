@@ -108,7 +108,22 @@ public class VideoProcessing {
             vetCores[i] = new SaltPepperCleaner();
             vetCores[i].start();
         }
+        for(SaltPepperCleaner it:vetCores){
+            try {
+                it.join();
+            } catch (InterruptedException e) {
+                System.err.println("Interrompido.");
+            }
+        }
 
+        boolean isActive = false;
+        do{
+            for (int i=0;i< vetCores.length; i++){
+                if (vetCores[i].isAlive()){
+                    isActive=true;
+                }
+            }
+        }while (!isActive);
         result = SaltPepperCleaner.getFixedFrames();
         return result;
     }
