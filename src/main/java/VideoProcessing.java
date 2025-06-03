@@ -97,15 +97,20 @@ public class VideoProcessing {
         escritor.release(); //limpando o buffer 
     }
 
-    public static void removerSalPimenta(byte pixels[][][]){
+    public static byte[][][] removerSalPimenta(byte pixels[][][]){
 
         SaltPepperCleaner.loadFrames(pixels);
+
+        byte result[][][] = new byte[pixels.length][pixels[0].length][pixels[0][0].length];
 
         SaltPepperCleaner vetCores[] = new SaltPepperCleaner[Runtime.getRuntime().availableProcessors()];
         for(int i = 0; i < vetCores.length; i++){
             vetCores[i] = new SaltPepperCleaner();
             vetCores[i].start();
         }
+
+        result = SaltPepperCleaner.getFixedFrames();
+        return result;
     }
 
     public static void main(String[] args) {
@@ -121,14 +126,14 @@ public class VideoProcessing {
                 pixels.length, pixels[0][0].length, pixels[0].length);
 
         System.out.println("processamento remove ruído 1");
-        removerSalPimenta(pixels); //voce deve implementar esta funcao
+        byte treatedSaltPepper[][][] = removerSalPimenta(pixels); //voce deve implementar esta funcao
 
         
         System.out.println("processamento remove ruído 2");
         //removerBorroesTempo(pixels); //voce deve implementar esta funcao
         
         System.out.println("Salvando...  " + caminhoGravar);
-        gravarVideo(pixels, caminhoGravar, fps);
+        gravarVideo(treatedSaltPepper, caminhoGravar, fps);
         System.out.println("Término do processamento");
     }
 }

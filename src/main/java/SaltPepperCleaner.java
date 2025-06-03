@@ -1,15 +1,12 @@
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class SaltPepperCleaner extends Thread {
-    private static List<byte[][]> taskBag = new ArrayList<>(); //De onde os cores vão pegar as tarefas
-    private static List<byte[][]> fixedFrames = new ArrayList<>(); //Destino final do frame corrigido
+    private static Vector<byte[][]> taskBag = new Vector<>(); //De onde os cores vão pegar as tarefas
+    private static Vector<byte[][]> fixedFrames = new Vector<>(); //Destino final do frame corrigido
     private byte[][] currentFrame; //o frame que será corrigido
     private static Object key = new Object();
 
-    //Devolve uma List<> com todos os pixels vizinhos de um pixel cujo indice é passado como parametro
+    //Devolve um Vector<> com todos os pixels vizinhos de um pixel cujo indice é passado como parametro
     private List<Byte> getNeighbours(byte[][] currentFrame, int i, int j) {
         List<Byte> pixels = new ArrayList<>();
         if (i > 0) {
@@ -73,8 +70,8 @@ public class SaltPepperCleaner extends Thread {
 
     //Método para tratar o frame atual, percorre a matriz de bytes e corrige os s
     private byte[][] treatFrame() {
-        byte[][] frameResult = new byte[currentFrame.length][currentFrame[0].length];
         this.currentFrame = taskBag.removeFirst();
+        byte[][] frameResult = new byte[currentFrame.length][currentFrame[0].length];
         List<Byte> neighbours = new ArrayList<>();
         for (int i = 0; i < this.currentFrame.length; i++) {
             for (int j = 0; j < this.currentFrame[i].length; j++) {
@@ -98,8 +95,24 @@ public class SaltPepperCleaner extends Thread {
         }
     }
 
+    //converte vector de frames tratados em matriz tridimensional e retorna essa matriz
+    public static byte[][][] getFixedFrames(){
+        byte fixedVideo[][][] = new byte[fixedFrames.size()][fixedFrames.get(0).length][fixedFrames.get(0)[0].length];
+        for (int i = 0; i < fixedVideo.length; i++){
+            fixedVideo[i] = fixedFrames.get(i);
+        }
+        return fixedVideo;
+    }
+
     @Override
     public void run() {
-        this.treatFrame();
+        while (!taskBag.isEmpty()){
+            synchronized (taskBag){
+                if(!taskBag.isEmpty()){
+                    fixedFrames.add(this.treatFrame());
+                }
+            }
+        }
+
     }
 }
