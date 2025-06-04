@@ -1,10 +1,9 @@
-import java.sql.SQLOutput;
 import java.util.*;
 
 public class SaltPepperCleaner extends Thread {
-    private static Vector<byte[][]> taskBag = new Vector<>(); //De onde os cores vão pegar as tarefas
-    private static Vector<byte[][]> fixedFrames = new Vector<>(); //Destino final do frame corrigido
-    private byte[][] currentFrame; //o frame que será corrigido
+    private static Vector<Frame> taskBag = new Vector<>(); //De onde os cores vão pegar as tarefas
+    private static byte[][][] fixedFrames; //Destino final do frame corrigido
+    private Frame currentFrame; //o frame que será corrigido
     private static Object key = new Object();
 
     //Devolve um Vector<> com todos os pixels vizinhos de um pixel cujo indice é passado como parametro
@@ -36,36 +35,43 @@ public class SaltPepperCleaner extends Thread {
         return pixels;
     }
 
-    //Calcula a mediana baseado em uma lista de pixels
-    private byte calcMediana(List<Byte> pixels) {
+    //Calcula a média baseado em uma lista de pixels
+    private byte calcMedia(List<Byte> pixels) {
         if (pixels == null || pixels.isEmpty()) {
             return 0; // valor padrão
         }
 
-        Collections.sort(pixels);
+        short media = 0;
+        for(Byte it:pixels){
+            media+=it;
+        }
+        media/=pixels.size();
+        return (byte) media;
+        /*Collections.sort(pixels);
         int size = pixels.size();
         int meio = size / 2;
 
         if (size % 2 == 0) {
-            return (byte) ((pixels.get(meio - 1) + pixels.get(meio)) / 2);
+            short mediana = (short) ((pixels.get(meio - 1) + pixels.get(meio)) / 2);
+            return (byte) mediana;
         } else {
             return pixels.get(meio);
-        }
+        }*/
     }
 
 
     //Método para tratar o frame atual, percorre a matriz de bytes e corrige os s
     private byte[][] treatFrame() {
-        byte[][] frameResult = new byte[currentFrame.length][currentFrame[0].length];
+        byte[][] frameResult = new byte[currentFrame.getFrame().length][currentFrame.getFrame()[0].length];
         List<Byte> neighbours = new ArrayList<>();
-        for (int i = 0; i < this.currentFrame.length; i++) {
-            for (int j = 0; j < this.currentFrame[i].length; j++) {
-                neighbours = getNeighbours(this.currentFrame, i, j);
-                byte mediana = calcMediana(neighbours);
-                if (this.currentFrame[i][j] < mediana - 24 || this.currentFrame[i][j] > mediana + 24){
-                   frameResult[i][j] = mediana;
+        for (int i = 0; i < this.currentFrame.getFrame().length; i++) {
+            for (int j = 0; j < this.currentFrame.getFrame()[i].length; j++) {
+                neighbours = getNeighbours(this.currentFrame.getFrame(), i, j);
+                byte media = calcMedia(neighbours);
+                if (this.currentFrame.getFrame()[i][j] < media - 165 || this.currentFrame.getFrame()[i][j] > media + 165){
+                   frameResult[i][j] = media;
                 }else {
-                    frameResult[i][j] = this.currentFrame[i][j];
+                    frameResult[i][j] = this.currentFrame.getFrame()[i][j];
                 }
             }
         }
@@ -76,17 +82,14 @@ public class SaltPepperCleaner extends Thread {
     //Carrega todos os frames para dentro de uma List
     public static void loadFrames(byte frames[][][]) {
         for (int i = 0; i < frames.length; i++) {
-            taskBag.add(frames[i]);
+            taskBag.add(new Frame(i, frames[i]));
         }
+        fixedFrames = new byte[frames.length][frames[0].length][frames[0][0].length];
     }
 
     //converte vector de frames tratados em matriz tridimensional e retorna essa matriz
     public static byte[][][] getFixedFrames(){
-        byte fixedVideo[][][] = new byte[fixedFrames.size()][fixedFrames.get(0).length][fixedFrames.get(0)[0].length];
-        for (int i = 0; i < fixedVideo.length; i++){
-            fixedVideo[i] = fixedFrames.get(i);
-        }
-        return fixedVideo;
+        return fixedFrames;
     }
 
     @Override
@@ -99,7 +102,7 @@ public class SaltPepperCleaner extends Thread {
                 }
             }
             if(currentFrame!=null){
-                fixedFrames.add(this.treatFrame());
+                fixedFrames[currentFrame.getIndex()] = this.treatFrame();
             }
             this.currentFrame=null;
         }
