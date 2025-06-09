@@ -7,7 +7,7 @@ public class SaltPepperCleaner extends Thread {
     private static Object key = new Object();
 
     //Devolve um Vector<> com todos os pixels vizinhos de um pixel cujo indice é passado como parametro
-    private List<Byte> getNeighbours(byte[][] currentFrame, int i, int j) {
+    /*private List<Byte> getNeighbours(byte[][] currentFrame, int i, int j) {
         List<Byte> pixels = new ArrayList<>();
         if (i > 0) {
             if (currentFrame[i - 1] != null) {
@@ -33,7 +33,31 @@ public class SaltPepperCleaner extends Thread {
             return pixels;
         }
         return pixels;
+    }*/
+
+
+    private List<Byte> getNeighbours(byte[][] currentFrame, int i, int j) {
+        List<Byte> pixels = new ArrayList<>();
+
+        for (int di = -1; di <= 1; di++) {
+            for (int dj = -1; dj <= 1; dj++) {
+                // Ignora o próprio pixel
+                if (di == 0 && dj == 0) continue;
+
+                int ni = i + di;
+                int nj = j + dj;
+
+                // Verifica se os índices estão dentro dos limites da matriz
+                if (ni >= 0 && ni < currentFrame.length &&
+                        nj >= 0 && nj < currentFrame[0].length) {
+                    pixels.add(currentFrame[ni][nj]);
+                }
+            }
+        }
+
+        return pixels;
     }
+
 
     //Calcula a média baseado em uma lista de pixels
     private byte calcMedia(List<Byte> pixels) {
