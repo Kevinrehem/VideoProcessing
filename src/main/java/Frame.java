@@ -11,15 +11,9 @@ public class Frame {
         return index;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
-    }
 
     public byte[][] getFrame() {
         return frame;
     }
 
-    public void setFrame(byte[][] frame) {
-        this.frame = frame;
-    }
 }

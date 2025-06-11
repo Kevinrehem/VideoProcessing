@@ -65,7 +65,7 @@ public class SaltPepperCleaner extends Thread {
             return 0; // valor padrão
         }
 
-        short media = 0;
+        int media = 0;
         for(Byte it:pixels){
             media+=it;
         }
@@ -88,8 +88,8 @@ public class SaltPepperCleaner extends Thread {
     private byte[][] treatFrame() {
         byte[][] frameResult = new byte[currentFrame.getFrame().length][currentFrame.getFrame()[0].length];
         List<Byte> neighbours = new ArrayList<>();
-        for (int i = 0; i < this.currentFrame.getFrame().length; i++) {
-            for (int j = 0; j < this.currentFrame.getFrame()[i].length; j++) {
+        for (int i = 1; i < this.currentFrame.getFrame().length-1; i++) {
+            for (int j = 1; j < this.currentFrame.getFrame()[i].length-1; j++) {
                 neighbours = getNeighbours(this.currentFrame.getFrame(), i, j);
                 byte media = calcMedia(neighbours);
                 if (this.currentFrame.getFrame()[i][j] < media - 165 || this.currentFrame.getFrame()[i][j] > media + 165){
