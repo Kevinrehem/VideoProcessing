@@ -91,7 +91,7 @@ public class SaltPepperCleaner extends Thread {
             for (int j = 1; j < this.currentFrame.getFrame()[i].length-1; j++) {
                 neighbours = getNeighbours(this.currentFrame.getFrame(), i, j);
                 byte media = calcMedia(neighbours);
-                if (this.currentFrame.getFrame()[i][j] < media - 165 || this.currentFrame.getFrame()[i][j] > media + 165){
+                if (this.currentFrame.getFrame()[i][j] < media - 160 || this.currentFrame.getFrame()[i][j] > media + 160){
                    frameResult[i][j] = media;
                 }else {
                     frameResult[i][j] = this.currentFrame.getFrame()[i][j];
