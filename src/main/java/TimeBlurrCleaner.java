@@ -1,7 +1,7 @@
 import java.util.Vector;
 
 public class TimeBlurrCleaner extends Thread{
-    private static Vector<FrameLine> taskBag = new Vector<>();
+    private final static Vector<FrameLine> taskBag = new Vector<>();
     private static byte[][][] fixedFrames;
     private FrameLine currentLine;
 

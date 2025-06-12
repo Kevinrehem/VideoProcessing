@@ -1,10 +1,9 @@
 import java.util.*;
 
 public class SaltPepperCleaner extends Thread {
-    private static Vector<Frame> taskBag = new Vector<>(); //De onde os cores vão pegar as tarefas
+    private final static Vector<Frame> taskBag = new Vector<>(); //De onde os cores vão pegar as tarefas
     private static byte[][][] fixedFrames; //Destino final do frame corrigido
     private Frame currentFrame; //o frame que será corrigido
-    private static Object key = new Object();
 
     //Devolve um Vector<> com todos os pixels vizinhos de um pixel cujo indice é passado como parametro
     /*private List<Byte> getNeighbours(byte[][] currentFrame, int i, int j) {
