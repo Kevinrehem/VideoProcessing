@@ -127,6 +127,22 @@ public class VideoProcessing {
     public static byte[][][] removerBorroesTempo(byte pixels[][][]){
         TimeBlurrCleaner.loadFrames(pixels);
         byte result[][][] = new byte[pixels.length][pixels[0].length][pixels[0][0].length];
+        TimeBlurrCleaner vetCores[] = new TimeBlurrCleaner[Runtime.getRuntime().availableProcessors()];
+
+        for(int i = 0; i < vetCores.length; i++){
+            vetCores[i] = new TimeBlurrCleaner();
+            vetCores[i].start();
+        }
+
+        for( TimeBlurrCleaner it:vetCores){
+            try {
+                it.join();
+            } catch (InterruptedException e) {
+                System.err.println("Interrompido.");
+            }
+        }
+
+        result = TimeBlurrCleaner.getFixedFrames();
 
         return result;
     }
@@ -135,7 +151,7 @@ public class VideoProcessing {
 
         String caminhoVideo = "lib\\video-trimmed.mp4";
         String caminhoGravar = "lib\\video-clean.mp4";
-        double fps = 21.0; //isso deve mudar se for outro vídeo (avaliar metadados ???)
+        double fps = 24.0; //isso deve mudar se for outro vídeo (avaliar metadados ???)
 
         System.out.println("Carregando o vídeo... " + caminhoVideo);
         byte pixels[][][] = carregarVideo(caminhoVideo);
@@ -148,10 +164,10 @@ public class VideoProcessing {
 
         
         System.out.println("processamento remove ruído 2");
-        removerBorroesTempo(treatedSaltPepper); //voce deve implementar esta funcao
+        byte treatedTimeBlurr[][][] = removerBorroesTempo(treatedSaltPepper); //voce deve implementar esta funcao
         
         System.out.println("Salvando...  " + caminhoGravar);
-        gravarVideo(treatedSaltPepper, caminhoGravar, fps);
+        gravarVideo(treatedTimeBlurr, caminhoGravar, fps);
         System.out.println("Término do processamento");
     }
 }

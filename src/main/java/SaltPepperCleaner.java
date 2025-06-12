@@ -47,10 +47,10 @@ public class SaltPepperCleaner extends Thread {
                 int nj = j + dj;
 
                 // Verifica se os índices estão dentro dos limites da matriz
-                if (ni >= 0 && ni < currentFrame.length &&
+                /*if (ni >= 0 && ni < currentFrame.length &&
                         nj >= 0 && nj < currentFrame[0].length) {
                     pixels.add(currentFrame[ni][nj]);
-                }
+                }*/
             }
         }
 
