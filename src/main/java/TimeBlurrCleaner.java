@@ -10,20 +10,20 @@ public class TimeBlurrCleaner extends Thread{
     tratados e devolvidos como um vetor byte[]*/
     private byte[] treatLine(){
         byte[] treatedLine = new byte[this.currentLine.getPixelLine().length];
-        for(int i = 15; i < this.currentLine.getPixelLine().length-15; i+=30){
+        for(int i = 20; i < this.currentLine.getPixelLine().length-20; i++){
             boolean blurr = true;
-            for(int j = i-15; j < i+15; j++){
-                if(this.currentLine.getPixelLine()[j] < this.currentLine.getPixelLine()[i]-2
-                || this.currentLine.getPixelLine()[j] > this.currentLine.getPixelLine()[i]+2){
+            for(int j = i-20; j < i+20; j++){
+                if(this.currentLine.getPixelLine()[j] < this.currentLine.getPixelLine()[i]-3
+                || this.currentLine.getPixelLine()[j] > this.currentLine.getPixelLine()[i]+3){
                     blurr = false;
                 }
             }
             if(blurr && this.currentLine.getPrevious()!=null){
-                for(int j = i-15; j < i+15; j++){
+                for(int j = i-20; j < i+20; j++){
                     treatedLine[j] = this.currentLine.getPrevious().getPixelLine()[j];
                 }
             }else{
-                for(int j = i-15; j < i+15; j++){
+                for(int j = i-20; j < i+20; j++){
                     treatedLine[j] = this.currentLine.getPixelLine()[j];
                 }
             }
