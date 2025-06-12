@@ -5,21 +5,22 @@ public class TimeBlurrCleaner extends Thread{
     private static byte[][][] fixedFrames;
     private FrameLine currentLine;
 
-    /*TODO... Aqui deve ser realizado o tratamento, linha a linha, da nossa matriz tridimensional.
+    /*Nesta função é realizado o tratamento, linha a linha, da nossa matriz tridimensional.
     A matriz será dividida em vários vetores unidimensionais de objetos tipo FrameLine, que serão
     tratados e devolvidos como um vetor byte[]*/
     private byte[] treatLine(){
         byte[] treatedLine = new byte[this.currentLine.getPixelLine().length];
-        for(int i = 20; i < this.currentLine.getPixelLine().length-20; i++){
+        for(int i = 20; i < this.currentLine.getPixelLine().length-20; i+=40){
             boolean blurr = true;
             for(int j = i-20; j < i+20; j++){
-                if(this.currentLine.getPixelLine()[j] < this.currentLine.getPixelLine()[i]-3
-                || this.currentLine.getPixelLine()[j] > this.currentLine.getPixelLine()[i]+3){
+                if(this.currentLine.getPixelLine()[j] < this.currentLine.getPixelLine()[i]-5
+                || this.currentLine.getPixelLine()[j] > this.currentLine.getPixelLine()[i]+5 ){
                     blurr = false;
                 }
             }
             if(blurr && this.currentLine.getPrevious()!=null){
                 for(int j = i-20; j < i+20; j++){
+                    System.out.println(this.currentLine.getPixelLine()[j] + " <-- " + this.currentLine.getPrevious().getPixelLine()[j]);
                     treatedLine[j] = this.currentLine.getPrevious().getPixelLine()[j];
                 }
             }else{
@@ -44,7 +45,7 @@ public class TimeBlurrCleaner extends Thread{
             synchronized(taskBag){
                 if(!taskBag.isEmpty()){
                     this.currentLine = taskBag.removeFirst();
-                    System.out.println(taskBag.size());
+                    //System.out.println(taskBag.size());
                 }
             }
             if(this.currentLine != null){

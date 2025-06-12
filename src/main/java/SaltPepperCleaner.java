@@ -1,9 +1,10 @@
 import java.util.*;
 
 public class SaltPepperCleaner extends Thread {
-    private final static Vector<Frame> taskBag = new Vector<>(); //De onde os cores vão pegar as tarefas
+    private static Vector<Frame> taskBag = new Vector<>(); //De onde os cores vão pegar as tarefas
     private static byte[][][] fixedFrames; //Destino final do frame corrigido
     private Frame currentFrame; //o frame que será corrigido
+    private static Object key = new Object();
 
     //Devolve um Vector<> com todos os pixels vizinhos de um pixel cujo indice é passado como parametro
     /*private List<Byte> getNeighbours(byte[][] currentFrame, int i, int j) {
@@ -38,25 +39,21 @@ public class SaltPepperCleaner extends Thread {
     private List<Byte> getNeighbours(byte[][] currentFrame, int i, int j) {
         List<Byte> pixels = new ArrayList<>();
 
-        for (int di = -1; di <= 1; di++) {
-            for (int dj = -1; dj <= 1; dj++) {
+        for (int di = -2; di <= 2; di++) {
+            for (int dj = -2; dj <= 2; dj++) {
                 // Ignora o próprio pixel
                 if (di == 0 && dj == 0) continue;
 
                 int ni = i + di;
                 int nj = j + dj;
-
+                pixels.add(currentFrame[ni][nj]);
                 // Verifica se os índices estão dentro dos limites da matriz
-                /*if (ni >= 0 && ni < currentFrame.length &&
-                        nj >= 0 && nj < currentFrame[0].length) {
-                    pixels.add(currentFrame[ni][nj]);
-                }*/
+
             }
         }
 
         return pixels;
     }
-
 
     //Calcula a média baseado em uma lista de pixels
     private byte calcMedia(List<Byte> pixels) {
@@ -64,12 +61,13 @@ public class SaltPepperCleaner extends Thread {
             return 0; // valor padrão
         }
 
-        int media = 0;
+        int soma = 0;
         for(Byte it:pixels){
-            media+=it;
+            soma+=it;
         }
-        media/=pixels.size();
-        return (byte) media;
+        soma/=pixels.size();
+        byte media = (byte) soma;
+        return media;
         /*Collections.sort(pixels);
         int size = pixels.size();
         int meio = size / 2;
@@ -83,16 +81,17 @@ public class SaltPepperCleaner extends Thread {
     }
 
 
-    //Método para tratar o frame atual, percorre a matriz de bytes e corrige os s
+    //Função para tratar o frame atual, percorre a matriz de bytes e corrige os s
     private byte[][] treatFrame() {
         byte[][] frameResult = new byte[currentFrame.getFrame().length][currentFrame.getFrame()[0].length];
         List<Byte> neighbours = new ArrayList<>();
-        for (int i = 1; i < this.currentFrame.getFrame().length-1; i++) {
-            for (int j = 1; j < this.currentFrame.getFrame()[i].length-1; j++) {
+        for (int i = 2; i < this.currentFrame.getFrame().length-2; i++) {
+            for (int j = 2; j < this.currentFrame.getFrame()[i].length-2; j++) {
                 neighbours = getNeighbours(this.currentFrame.getFrame(), i, j);
                 byte media = calcMedia(neighbours);
-                if (this.currentFrame.getFrame()[i][j] < media - 160 || this.currentFrame.getFrame()[i][j] > media + 160){
-                   frameResult[i][j] = media;
+                if (this.currentFrame.getFrame()[i][j] < media - 190 || this.currentFrame.getFrame()[i][j] > media + 190){
+                    System.out.println(this.currentFrame.getFrame()[i][j] + " <-- " + media);
+                    frameResult[i][j] = media;
                 }else {
                     frameResult[i][j] = this.currentFrame.getFrame()[i][j];
                 }
@@ -121,7 +120,7 @@ public class SaltPepperCleaner extends Thread {
             synchronized (taskBag){
                 if(!taskBag.isEmpty()){
                     this.currentFrame = taskBag.removeFirst();
-                    System.out.println(taskBag.size());
+                    //System.out.println(taskBag.size());
                 }
             }
             if(currentFrame!=null){

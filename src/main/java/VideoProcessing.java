@@ -1,6 +1,8 @@
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
@@ -161,6 +163,9 @@ public class VideoProcessing {
 
         System.out.println("processamento remove ruído 1");
         byte treatedSaltPepper[][][] = removerSalPimenta(pixels); //voce deve implementar esta funcao
+
+        System.out.println("Pressione enter para continuar...");
+        new Scanner(System.in).nextLine();
 
         
         System.out.println("processamento remove ruído 2");
