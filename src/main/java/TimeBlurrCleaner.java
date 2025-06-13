@@ -1,7 +1,9 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 public class TimeBlurrCleaner extends Thread{
-    private final static Vector<FrameLine> taskBag = new Vector<>();
+    private final static List<FrameLine> taskBag = new ArrayList<>();
     private static byte[][][] fixedFrames;
     private FrameLine currentLine;
 
@@ -20,7 +22,7 @@ public class TimeBlurrCleaner extends Thread{
             }
             if(blurr && this.currentLine.getPrevious()!=null){
                 for(int j = i-20; j < i+20; j++){
-                    System.out.println(this.currentLine.getPixelLine()[j] + " <-- " + this.currentLine.getPrevious().getPixelLine()[j]);
+                    //System.out.println(this.currentLine.getPixelLine()[j] + " <-- " + this.currentLine.getPrevious().getPixelLine()[j]);
                     treatedLine[j] = this.currentLine.getPrevious().getPixelLine()[j];
                 }
             }else{
@@ -45,7 +47,7 @@ public class TimeBlurrCleaner extends Thread{
             synchronized(taskBag){
                 if(!taskBag.isEmpty()){
                     this.currentLine = taskBag.removeFirst();
-                    //System.out.println(taskBag.size());
+                    System.out.println(taskBag.size());
                 }
             }
             if(this.currentLine != null){

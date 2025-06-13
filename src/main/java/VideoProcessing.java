@@ -101,6 +101,8 @@ public class VideoProcessing {
 
     //chama os métodos da classe SaltPepperCleaner para iniciar tratamento do erro sal e pimenta
     public static byte[][][] removerSalPimenta(byte pixels[][][]){
+        System.out.println("Enter para continuar...");
+        new Scanner(System.in).nextLine();
         System.out.println("Processamento remove ruído 1...");
         SaltPepperCleaner.loadFrames(pixels);
 
@@ -127,6 +129,7 @@ public class VideoProcessing {
     public static byte[][][] removerBorroesTempo(byte pixels[][][]){
 
         System.out.println("Enter para continuar...");
+        new Scanner(System.in).nextLine();
         System.out.println("Processamento remove ruído 2...");
 
         TimeBlurrCleaner.loadFrames(pixels);
@@ -146,13 +149,13 @@ public class VideoProcessing {
         }
 
 
-
+        System.out.println("Salvando...");
         return TimeBlurrCleaner.getFixedFrames();
     }
 
     public static void main(String[] args) {
 
-        String caminhoVideo = "lib\\video-trimmed.mp4";
+        String caminhoVideo = "lib\\video.mp4";
         String caminhoGravar = "lib\\video-clean.mp4";
         double fps = 24.0; //isso deve mudar se for outro vídeo (avaliar metadados ???)
 
@@ -162,11 +165,6 @@ public class VideoProcessing {
         System.out.printf("Frames: %d   Resolução: %d x %d \n",
                 pixels.length, pixels[0][0].length, pixels[0].length);
 
-
-
-
-        
-        System.out.println("Salvando...  " + caminhoGravar);
         gravarVideo(removerBorroesTempo(removerSalPimenta(pixels)), caminhoGravar, fps);
         System.out.println("Término do processamento");
     }
