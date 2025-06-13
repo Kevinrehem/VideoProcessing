@@ -7,35 +7,6 @@ public class SaltPepperCleaner extends Thread {
     private static Object key = new Object();
 
     //Devolve um Vector<> com todos os pixels vizinhos de um pixel cujo indice é passado como parametro
-    /*private List<Byte> getNeighbours(byte[][] currentFrame, int i, int j) {
-        List<Byte> pixels = new ArrayList<>();
-        if (i > 0) {
-            if (currentFrame[i - 1] != null) {
-                pixels.add(currentFrame[i - 1][j]);
-                if (j - 1 >= 0) {
-                    pixels.add(currentFrame[i - 1][j - 1]);
-                    pixels.add(currentFrame[i][j - 1]);
-                }
-                if (j + 1 < currentFrame[i].length && j >= 0) {
-                    pixels.add(currentFrame[i - 1][j + 1]);
-                    pixels.add(currentFrame[i][j + 1]);
-                }
-            }
-
-        }
-        if (i + 1 < currentFrame.length) {
-            if (currentFrame[i + 1] != null) {
-                pixels.add(currentFrame[i + 1][j]);
-                if (j - 1 >= 0) pixels.add(currentFrame[i + 1][j - 1]);
-                if (j + 1 < currentFrame[i].length && i > 0) pixels.add(currentFrame[i - 1][j + 1]);
-            }
-            Collections.sort(pixels);
-            return pixels;
-        }
-        return pixels;
-    }*/
-
-
     private List<Byte> getNeighbours(byte[][] currentFrame, int i, int j) {
         List<Byte> pixels = new ArrayList<>();
 
@@ -68,16 +39,6 @@ public class SaltPepperCleaner extends Thread {
         soma/=pixels.size();
         byte media = (byte) soma;
         return media;
-        /*Collections.sort(pixels);
-        int size = pixels.size();
-        int meio = size / 2;
-
-        if (size % 2 == 0) {
-            short mediana = (short) ((pixels.get(meio - 1) + pixels.get(meio)) / 2);
-            return (byte) mediana;
-        } else {
-            return pixels.get(meio);
-        }*/
     }
 
 
@@ -89,7 +50,7 @@ public class SaltPepperCleaner extends Thread {
             for (int j = 2; j < this.currentFrame.getFrame()[i].length-2; j++) {
                 neighbours = getNeighbours(this.currentFrame.getFrame(), i, j);
                 byte media = calcMedia(neighbours);
-                if (this.currentFrame.getFrame()[i][j] < media - 190 || this.currentFrame.getFrame()[i][j] > media + 190){
+                if (this.currentFrame.getFrame()[i][j] < media - 195 || this.currentFrame.getFrame()[i][j] > media + 195){
                     System.out.println(this.currentFrame.getFrame()[i][j] + " <-- " + media);
                     frameResult[i][j] = media;
                 }else {

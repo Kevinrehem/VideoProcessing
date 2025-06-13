@@ -101,10 +101,9 @@ public class VideoProcessing {
 
     //chama os métodos da classe SaltPepperCleaner para iniciar tratamento do erro sal e pimenta
     public static byte[][][] removerSalPimenta(byte pixels[][][]){
-
+        System.out.println("Processamento remove ruído 1...");
         SaltPepperCleaner.loadFrames(pixels);
 
-        byte result[][][] = new byte[pixels.length][pixels[0].length][pixels[0][0].length];
 
         SaltPepperCleaner vetCores[] = new SaltPepperCleaner[Runtime.getRuntime().availableProcessors()];
         for(int i = 0; i < vetCores.length; i++){
@@ -121,14 +120,16 @@ public class VideoProcessing {
         }
 
 
-        result = SaltPepperCleaner.getFixedFrames();
-        return result;
+        return SaltPepperCleaner.getFixedFrames();
     }
 
     //Chama os métodos da classe TimeBlurrCleaner para iniciar o tratamento do erro de borrões de tempo
     public static byte[][][] removerBorroesTempo(byte pixels[][][]){
+
+        System.out.println("Enter para continuar...");
+        System.out.println("Processamento remove ruído 2...");
+
         TimeBlurrCleaner.loadFrames(pixels);
-        byte result[][][] = new byte[pixels.length][pixels[0].length][pixels[0][0].length];
         TimeBlurrCleaner vetCores[] = new TimeBlurrCleaner[Runtime.getRuntime().availableProcessors()];
 
         for(int i = 0; i < vetCores.length; i++){
@@ -144,9 +145,9 @@ public class VideoProcessing {
             }
         }
 
-        result = TimeBlurrCleaner.getFixedFrames();
 
-        return result;
+
+        return TimeBlurrCleaner.getFixedFrames();
     }
 
     public static void main(String[] args) {
@@ -161,18 +162,12 @@ public class VideoProcessing {
         System.out.printf("Frames: %d   Resolução: %d x %d \n",
                 pixels.length, pixels[0][0].length, pixels[0].length);
 
-        System.out.println("processamento remove ruído 1");
-        byte treatedSaltPepper[][][] = removerSalPimenta(pixels); //voce deve implementar esta funcao
 
-        System.out.println("Pressione enter para continuar...");
-        new Scanner(System.in).nextLine();
 
-        
-        System.out.println("processamento remove ruído 2");
-        byte treatedTimeBlurr[][][] = removerBorroesTempo(treatedSaltPepper); //voce deve implementar esta funcao
+
         
         System.out.println("Salvando...  " + caminhoGravar);
-        gravarVideo(treatedTimeBlurr, caminhoGravar, fps);
+        gravarVideo(removerBorroesTempo(removerSalPimenta(pixels)), caminhoGravar, fps);
         System.out.println("Término do processamento");
     }
 }

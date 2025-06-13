@@ -13,8 +13,8 @@ public class TimeBlurrCleaner extends Thread{
         for(int i = 20; i < this.currentLine.getPixelLine().length-20; i+=40){
             boolean blurr = true;
             for(int j = i-20; j < i+20; j++){
-                if(this.currentLine.getPixelLine()[j] < this.currentLine.getPixelLine()[i]-5
-                || this.currentLine.getPixelLine()[j] > this.currentLine.getPixelLine()[i]+5 ){
+                if(this.currentLine.getPixelLine()[j] > -122
+                && this.currentLine.getPixelLine()[j] < 122 ){
                     blurr = false;
                 }
             }
