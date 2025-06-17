@@ -23,6 +23,7 @@ public class TimeBlurrCleaner extends Thread{
                 for(int j = i-15; j < i+15; j++){
                     //System.out.println(this.currentLine.getPixelLine()[j] + " <-- " + this.currentLine.getPrevious().getPixelLine()[j]);
                     treatedLine[j] = calcCorrection(this.currentLine, j);
+                    System.out.println(this.currentLine.getPixelLine()[j] + " <---- " + treatedLine[j]);
                 }
             }else{
                 for(int j = i-15; j < i+15; j++){
@@ -39,8 +40,8 @@ public class TimeBlurrCleaner extends Thread{
             return 0;
         }
         int media = 0;
-        media += frameLine.getPrevious().getPixelLine()[index];
-        media += frameLine.getNext().getPixelLine()[index];
+        media += frameLine.getPrevious()[index];
+        media += frameLine.getNext()[index];
         media /= 2;
         return (byte)media;
 
@@ -75,9 +76,7 @@ public class TimeBlurrCleaner extends Thread{
             for(int j=0;j<frames[i].length;j++){
                 FrameLine aux;
                 if(i>2 && i<frames.length-2){
-                    aux = new FrameLine(frames[i][j], i, j,
-                            new FrameLine(frames[i-2][j], i-2, j,null, null),
-                            new FrameLine(frames[i+2][j], i+2, j,null, null));
+                    aux = new FrameLine(frames[i][j], i, j, frames[i-2][j], frames[i+2][j]);
                 }else {
                     aux = new FrameLine(frames[i][j], i, j,null, null);
                 }

@@ -19,6 +19,7 @@ public class VideoProcessing {
     }
 
     public static byte[][][] carregarVideo(String caminho) {
+        System.out.println("Carregando o vídeo... " + caminho);
 
         VideoCapture captura = new VideoCapture(caminho);
         if (!captura.isOpened()) {
@@ -61,6 +62,9 @@ public class VideoProcessing {
         for (int i = 0; i < frames.size(); i++) {
             cuboPixels[i] = frames.get(i);
         }
+
+        System.out.printf("Frames: %d   Resolução: %d x %d \n",
+                cuboPixels.length, cuboPixels[0][0].length, cuboPixels[0].length);
         
         return cuboPixels;
     }
@@ -155,17 +159,11 @@ public class VideoProcessing {
 
     public static void main(String[] args) {
 
-        String caminhoVideo = "lib\\video-trimmed.mp4";
+        String caminhoVideo = "lib\\video.mp4";
         String caminhoGravar = "lib\\video-clean.mp4";
         double fps = 24.0; //isso deve mudar se for outro vídeo (avaliar metadados ???)
 
-        System.out.println("Carregando o vídeo... " + caminhoVideo);
-        byte pixels[][][] = carregarVideo(caminhoVideo);
-
-        System.out.printf("Frames: %d   Resolução: %d x %d \n",
-                pixels.length, pixels[0][0].length, pixels[0].length);
-
-        gravarVideo(removerBorroesTempo(removerSalPimenta(pixels)), caminhoGravar, fps);
+        gravarVideo(removerBorroesTempo(removerSalPimenta(carregarVideo(caminhoVideo))), caminhoGravar, fps);
         System.out.println("Término do processamento");
     }
 }

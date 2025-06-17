@@ -2,9 +2,9 @@ public class FrameLine {
     private byte [] pixelLine;
     private int time;
     private int index;
-    private FrameLine previous, next;
+    private byte[] previous, next;
 
-    public FrameLine(byte[] pixelLine, int time, int lineIndex, FrameLine previous, FrameLine next) {
+    public FrameLine(byte[] pixelLine, int time, int lineIndex, byte[] previous, byte[] next) {
         this.pixelLine = pixelLine;
         this.time = time;
         this.index = lineIndex;
@@ -12,7 +12,7 @@ public class FrameLine {
         this.next = next;
     }
 
-    public FrameLine getNext() {
+    public byte[] getNext() {
         return next;
     }
 
@@ -28,7 +28,7 @@ public class FrameLine {
         return index;
     }
 
-    public FrameLine getPrevious() {
+    public byte[] getPrevious() {
         return previous;
     }
 }
