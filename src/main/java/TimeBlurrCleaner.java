@@ -34,6 +34,7 @@ public class TimeBlurrCleaner extends Thread{
         return treatedLine;
     }
 
+    //TODO...
     private byte calcCorrection(FrameLine frameLine){
         if(frameLine.getPrevious() == null || frameLine.getNext() == null){
             return 0;
