@@ -75,3 +75,5 @@ public class TimeBlurrCleaner extends Thread{
     }
 
 }
+
+//aumentar o numero de frames para frente e para tras, implementar média do futuro e passado para correção e aumento do processamento

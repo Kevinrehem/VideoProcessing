@@ -155,7 +155,7 @@ public class VideoProcessing {
 
     public static void main(String[] args) {
 
-        String caminhoVideo = "lib\\video.mp4";
+        String caminhoVideo = "lib\\video-trimmed.mp4";
         String caminhoGravar = "lib\\video-clean.mp4";
         double fps = 24.0; //isso deve mudar se for outro vídeo (avaliar metadados ???)
 
