@@ -12,11 +12,11 @@ public class TimeBlurrCleaner extends Thread{
     tratados e devolvidos como um vetor byte[]*/
     private byte[] treatLine(){
         byte[] treatedLine = new byte[this.currentLine.getPixelLine().length];
-        for(int i = 20; i < this.currentLine.getPixelLine().length-20; i+=40){
+        for(int i = 20; i < this.currentLine.getPixelLine().length-20; i++){
             boolean blurr = true;
             for(int j = i-20; j < i+20; j++){
-                if(this.currentLine.getPixelLine()[j] > -122
-                && this.currentLine.getPixelLine()[j] < 122 ){
+                if(this.currentLine.getPixelLine()[j] > -120
+                && this.currentLine.getPixelLine()[j] < 119 ){
                     blurr = false;
                 }
             }
@@ -32,6 +32,13 @@ public class TimeBlurrCleaner extends Thread{
             }
         }
         return treatedLine;
+    }
+
+    private byte calcCorrection(FrameLine frameLine){
+        if(frameLine.getPrevious() == null || frameLine.getNext() == null){
+            return 0;
+        }
+
     }
 
     //retorna os frames corrigidos
@@ -62,10 +69,12 @@ public class TimeBlurrCleaner extends Thread{
         for(int i=0;i<frames.length;i++){
             for(int j=0;j<frames[i].length;j++){
                 FrameLine aux;
-                if(i>0){
-                    aux = new FrameLine(frames[i][j], i, j,new FrameLine(frames[i-1][j], i-1, j,null));
+                if(i>3 && i<frames.length-3){
+                    aux = new FrameLine(frames[i][j], i, j,
+                            new FrameLine(frames[i-3][j], i-3, j,null, null),
+                            new FrameLine(frames[i+3][j], i+3, j,null, null));
                 }else {
-                    aux = new FrameLine(frames[i][j], i, j,null);
+                    aux = new FrameLine(frames[i][j], i, j,null, null);
                 }
                 taskBag.add(aux);
             }
