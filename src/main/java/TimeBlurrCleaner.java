@@ -12,18 +12,17 @@ public class TimeBlurrCleaner extends Thread{
     tratados e devolvidos como um vetor byte[]*/
     private byte[] treatLine(){
         byte[] treatedLine = new byte[this.currentLine.getPixelLine().length];
-        for(int i = 20; i < this.currentLine.getPixelLine().length-20; i++){
+        for(int i = 20; i < this.currentLine.getPixelLine().length-20; i+=40){
             boolean blurr = true;
             for(int j = i-20; j < i+20; j++){
-                if(this.currentLine.getPixelLine()[j] > -120
-                && this.currentLine.getPixelLine()[j] < 119 ){
+                if(this.currentLine.getPixelLine()[j] < 122 ){
                     blurr = false;
                 }
             }
-            if(blurr && this.currentLine.getPrevious()!=null){
+            if(blurr && this.currentLine.getPrevious()!=null && this.currentLine.getNext()!=null){
                 for(int j = i-20; j < i+20; j++){
                     //System.out.println(this.currentLine.getPixelLine()[j] + " <-- " + this.currentLine.getPrevious().getPixelLine()[j]);
-                    treatedLine[j] = this.currentLine.getPrevious().getPixelLine()[j];
+                    treatedLine[j] = calcCorrection(this.currentLine, j);
                 }
             }else{
                 for(int j = i-20; j < i+20; j++){
@@ -35,10 +34,15 @@ public class TimeBlurrCleaner extends Thread{
     }
 
     //TODO...
-    private byte calcCorrection(FrameLine frameLine){
+    private byte calcCorrection(FrameLine frameLine, int index){
         if(frameLine.getPrevious() == null || frameLine.getNext() == null){
             return 0;
         }
+        int media = 0;
+        media += frameLine.getPrevious().getPixelLine()[index];
+        media += frameLine.getNext().getPixelLine()[index];
+        media /= 2;
+        return (byte)media;
 
     }
 
@@ -70,10 +74,10 @@ public class TimeBlurrCleaner extends Thread{
         for(int i=0;i<frames.length;i++){
             for(int j=0;j<frames[i].length;j++){
                 FrameLine aux;
-                if(i>3 && i<frames.length-3){
+                if(i>2 && i<frames.length-2){
                     aux = new FrameLine(frames[i][j], i, j,
-                            new FrameLine(frames[i-3][j], i-3, j,null, null),
-                            new FrameLine(frames[i+3][j], i+3, j,null, null));
+                            new FrameLine(frames[i-2][j], i-2, j,null, null),
+                            new FrameLine(frames[i+2][j], i+2, j,null, null));
                 }else {
                     aux = new FrameLine(frames[i][j], i, j,null, null);
                 }
