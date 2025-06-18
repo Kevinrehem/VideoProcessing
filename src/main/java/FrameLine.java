@@ -1,23 +1,17 @@
 public class FrameLine {
-    private byte [] pixelLine;
     private int time;
     private int index;
-    private byte[] previous, next;
+    private final int previous, next;
 
-    public FrameLine(byte[] pixelLine, int time, int lineIndex, byte[] previous, byte[] next) {
-        this.pixelLine = pixelLine;
+    public FrameLine(int time, int lineIndex, int previous, int next) {
         this.time = time;
         this.index = lineIndex;
         this.previous = previous;
         this.next = next;
     }
 
-    public byte[] getNext() {
-        return next;
-    }
-
-    public byte[] getPixelLine() {
-        return pixelLine;
+    public byte[] getNext(byte[][][] allFrames) {
+        return (next< allFrames.length) ? allFrames[this.next][this.index] : null;
     }
 
     public int getTime() {
@@ -28,7 +22,7 @@ public class FrameLine {
         return index;
     }
 
-    public byte[] getPrevious() {
-        return previous;
+    public byte[] getPrevious(byte[][][] allFrames) {
+        return (previous>=0) ? allFrames[this.previous][this.index] : null;
     }
 }
