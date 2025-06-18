@@ -4,6 +4,7 @@ import java.util.Vector;
 
 public class TimeBlurrCleaner extends Thread{
     private final static List<FrameLine> taskBag = new ArrayList<>();
+    private static int originalBagSize;
     private static byte[][][] fixedFrames;
     private static byte[][][] originalFrames;
     private FrameLine currentLine;
@@ -25,7 +26,7 @@ public class TimeBlurrCleaner extends Thread{
                 for(int j = i-15; j < i+15; j++){
                     //System.out.println(this.currentLine.getPixelLine()[j] + " <-- " + this.currentLine.getPrevious().getPixelLine()[j]);
                     treatedLine[j] = calcCorrection(this.currentLine, j);
-                    System.out.println(originalFrames[currentLine.getTime()][currentLine.getIndex()][j] + " <---- " + treatedLine[j]);
+                    //System.out.println(originalFrames[currentLine.getTime()][currentLine.getIndex()][j] + " <---- " + treatedLine[j]);
                 }
             }else{
                 for(int j = i-15; j < i+15; j++){
@@ -62,7 +63,7 @@ public class TimeBlurrCleaner extends Thread{
             synchronized(taskBag){
                 if(!taskBag.isEmpty()){
                     this.currentLine = taskBag.removeFirst();
-                    System.out.println(taskBag.size());
+                    System.out.println((1.0-(double) taskBag.size()/originalBagSize)*100.0 + "%");
                 }
             }
             if(this.currentLine != null){
@@ -80,6 +81,7 @@ public class TimeBlurrCleaner extends Thread{
                 taskBag.add(new FrameLine(i, j, i-2, i+2));
             }
         }
+        originalBagSize = taskBag.size();
         fixedFrames = new byte[frames.length][frames[0].length][frames[0][0].length];
 
     }

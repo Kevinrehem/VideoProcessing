@@ -1,8 +1,9 @@
 import java.util.*;
 
 public class SaltPepperCleaner extends Thread {
-    private static List<Frame> taskBag = new ArrayList<>(); //De onde os cores vão pegar as tarefas
+    private static final List<Frame> taskBag = new ArrayList<>(); //De onde os cores vão pegar as tarefas
     private static byte[][][] fixedFrames; //Destino final do frame corrigido
+    private static int originalBagSize;
     private Frame currentFrame; //o frame que será corrigido
 
     //Devolve um Vector<> com todos os pixels vizinhos de um pixel cujo indice é passado como parametro
@@ -66,6 +67,7 @@ public class SaltPepperCleaner extends Thread {
         for (int i = 0; i < frames.length; i++) {
             taskBag.add(new Frame(i, frames[i]));
         }
+        originalBagSize=taskBag.size();
         fixedFrames = new byte[frames.length][frames[0].length][frames[0][0].length];
     }
 
@@ -80,7 +82,7 @@ public class SaltPepperCleaner extends Thread {
             synchronized (taskBag){
                 if(!taskBag.isEmpty()){
                     this.currentFrame = taskBag.removeFirst();
-                    System.out.println(taskBag.size());
+                    System.out.println((1.0-(double)taskBag.size()/originalBagSize)*100 + "%");
                 }
             }
             if(currentFrame!=null){
