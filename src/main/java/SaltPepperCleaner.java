@@ -1,3 +1,4 @@
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class SaltPepperCleaner extends Thread {
@@ -82,7 +83,8 @@ public class SaltPepperCleaner extends Thread {
             synchronized (taskBag){
                 if(!taskBag.isEmpty()){
                     this.currentFrame = taskBag.removeFirst();
-                    System.out.println((1.0-(double)taskBag.size()/originalBagSize)*100 + "%");
+                    DecimalFormat df = new DecimalFormat("#.##");
+                    System.out.println(df.format((1.0-(double)taskBag.size()/originalBagSize)*100) + "%");
                 }
             }
             if(currentFrame!=null){

@@ -1,3 +1,4 @@
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -63,7 +64,8 @@ public class TimeBlurrCleaner extends Thread{
             synchronized(taskBag){
                 if(!taskBag.isEmpty()){
                     this.currentLine = taskBag.removeFirst();
-                    System.out.println((1.0-(double) taskBag.size()/originalBagSize)*100.0 + "%");
+                    DecimalFormat df = new DecimalFormat("#.##");
+                    System.out.println(df.format((1.0-(double)taskBag.size()/originalBagSize)*100) + "%");
                 }
             }
             if(this.currentLine != null){
