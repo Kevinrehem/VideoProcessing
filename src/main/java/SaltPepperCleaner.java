@@ -84,7 +84,9 @@ public class SaltPepperCleaner extends Thread {
                 if(!taskBag.isEmpty()){
                     this.currentFrame = taskBag.removeFirst();
                     DecimalFormat df = new DecimalFormat("#.##");
-                    System.out.println(df.format((1.0-(double)taskBag.size()/originalBagSize)*100) + "%");
+                    if((taskBag.size()/originalBagSize)%5==0){
+                        System.out.println(df.format((1.0-(double)taskBag.size()/originalBagSize)*100) + "%");
+                    }
                 }
             }
             if(currentFrame!=null){

@@ -104,14 +104,14 @@ public class VideoProcessing {
     }
 
     //chama os métodos da classe SaltPepperCleaner para iniciar tratamento do erro sal e pimenta
-    public static byte[][][] removerSalPimenta(byte pixels[][][]){
-        System.out.println("Enter para continuar...");
-        new Scanner(System.in).nextLine();
+    public static byte[][][] removerSalPimenta(byte pixels[][][], int cores){
+        /*System.out.println("Enter para continuar...");
+        new Scanner(System.in).nextLine();*/
         System.out.println("Processamento remove ruído 1...");
         SaltPepperCleaner.loadFrames(pixels);
 
 
-        SaltPepperCleaner vetCores[] = new SaltPepperCleaner[Runtime.getRuntime().availableProcessors()];
+        SaltPepperCleaner vetCores[] = new SaltPepperCleaner[cores];
         for(int i = 0; i < vetCores.length; i++){
             vetCores[i] = new SaltPepperCleaner();
             vetCores[i].start();
@@ -130,14 +130,14 @@ public class VideoProcessing {
     }
 
     //Chama os métodos da classe TimeBlurrCleaner para iniciar o tratamento do erro de borrões de tempo
-    public static byte[][][] removerBorroesTempo(byte pixels[][][]){
+    public static byte[][][] removerBorroesTempo(byte pixels[][][], int cores){
 
-        System.out.println("Enter para continuar...");
-        new Scanner(System.in).nextLine();
+        /*System.out.println("Enter para continuar...");
+        new Scanner(System.in).nextLine();*/
         System.out.println("Processamento remove ruído 2...");
 
         TimeBlurrCleaner.loadFrames(pixels);
-        TimeBlurrCleaner vetCores[] = new TimeBlurrCleaner[Runtime.getRuntime().availableProcessors()];
+        TimeBlurrCleaner vetCores[] = new TimeBlurrCleaner[cores];
 
         for(int i = 0; i < vetCores.length; i++){
             vetCores[i] = new TimeBlurrCleaner();
@@ -162,8 +162,13 @@ public class VideoProcessing {
         String caminhoVideo = "lib\\video.mp4";
         String caminhoGravar = "lib\\video-clean.mp4";
         double fps = 24.0; //isso deve mudar se for outro vídeo (avaliar metadados ???)
-
-        gravarVideo(removerBorroesTempo(removerSalPimenta(carregarVideo(caminhoVideo))), caminhoGravar, fps);
+        System.out.print("Cores: ");
+        int cores = new Scanner(System.in).nextInt();
+        long start = System.currentTimeMillis();
+        gravarVideo(removerBorroesTempo(removerSalPimenta(carregarVideo(caminhoVideo), cores), cores), caminhoGravar, fps);
+        long end = System.currentTimeMillis();
         System.out.println("Término do processamento");
+        System.out.println("Tempo de execução: " + (double)(end - start)/1000 + "s");
+        System.out.println("Cores: " + cores);
     }
 }
