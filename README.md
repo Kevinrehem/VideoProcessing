@@ -19,7 +19,9 @@ Foram adotadas duas metodologias distintas para cada tipo de tratamento de víde
 
 Para a classe que implementa a correção do erro Salt and Pepper, foi entregue a cada um dos núcleos do processador um objeto da classe Frame, que armazena toda a matriz de pixels de um frame, além da sua posição original no vídeo, para onde o frame deve ser devolvido após tratamento. A correção é calculada através da média dos pixels vizinhos ao pixel que deve ser tratado. 
 
-A decisão de quais pixels devem ou não ser tratados foi estabelecida através de um threshold de distância de valor entre o pixel sendo análisado e a média do valor de todos os pixels vizinhos, quando a distância do valor é maior que 195, esse pixel é ajustado para o valor da média. Esse valor de 195 foi decidido a partir de testagem intensiva.
+A decisão de quais pixels devem ou não ser tratados foi estabelecida através de um threshold de distância de valor entre o pixel sendo análisado e a média do valor de todos os pixels vizinhos, quando a distância do valor é maior que 190, esse pixel é ajustado para o valor da média. Esse valor de 190 foi decidido a partir de testagem intensiva.
+
+![Exemplo de fluxo da classe SaltPepperCleaner](/assets/images/SaltPepperCleanerFlux.png)
 
 ### 2.2. Borrões de Tempo (TimeBlurrCleaner)
 
