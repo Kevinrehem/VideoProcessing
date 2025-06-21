@@ -25,9 +25,7 @@ public class TimeBlurrCleaner extends Thread{
             }
             if(blurr && this.currentLine.getPrevious(originalFrames)!=null && this.currentLine.getNext(originalFrames)!=null){
                 for(int j = i-15; j < i+15; j++){
-                    //System.out.println(this.currentLine.getPixelLine()[j] + " <-- " + this.currentLine.getPrevious().getPixelLine()[j]);
                     treatedLine[j] = calcCorrection(this.currentLine, j);
-                    //System.out.println(originalFrames[currentLine.getTime()][currentLine.getIndex()][j] + " <---- " + treatedLine[j]);
                 }
             }else{
                 for(int j = i-15; j < i+15; j++){
@@ -38,7 +36,8 @@ public class TimeBlurrCleaner extends Thread{
         return treatedLine;
     }
 
-    //TODO...
+    /*Calcula a correção do pixel utilizando a média do valor entre o pixel de mesma coordenada em um frame
+    de 2 posições atrás e 2 posições à frente*/
     private byte calcCorrection(FrameLine frameLine, int index){
         if(frameLine.getPrevious(originalFrames) == null || frameLine.getNext(originalFrames) == null){
             return 0;
@@ -65,7 +64,7 @@ public class TimeBlurrCleaner extends Thread{
                 if(!taskBag.isEmpty()){
                     this.currentLine = taskBag.removeFirst();
                     DecimalFormat df = new DecimalFormat("#.##");
-                    if((taskBag.size()/originalBagSize)%5==0){
+                    if((taskBag.size()/originalBagSize)%500==0){
                         System.out.println(df.format((1.0-(double)taskBag.size()/originalBagSize)*100) + "%");
                     }
                 }

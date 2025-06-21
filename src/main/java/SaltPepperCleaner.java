@@ -7,7 +7,7 @@ public class SaltPepperCleaner extends Thread {
     private static int originalBagSize;
     private Frame currentFrame; //o frame que será corrigido
 
-    //Devolve um Vector<> com todos os pixels vizinhos de um pixel cujo indice é passado como parametro
+    //Devolve um List<Byte> com todos os pixels vizinhos de um pixel cujo indice é passado como parametro
     private List<Byte> getNeighbours(byte[][] currentFrame, int i, int j) {
         List<Byte> pixels = new ArrayList<>();
 
@@ -43,7 +43,7 @@ public class SaltPepperCleaner extends Thread {
     }
 
 
-    //Função para tratar o frame atual, percorre a matriz de bytes e corrige os s
+    //Método para tratar o frame atual, percorre a matriz de bytes e corrige os outliers
     private byte[][] treatFrame() {
         byte[][] frameResult = new byte[currentFrame.getFrame().length][currentFrame.getFrame()[0].length];
         List<Byte> neighbours = new ArrayList<>();
@@ -82,17 +82,20 @@ public class SaltPepperCleaner extends Thread {
         while (!taskBag.isEmpty()){
             synchronized (taskBag){
                 if(!taskBag.isEmpty()){
+                    //entrega um frame da taskBag estática para o objeto SaltPepperCleaner
                     this.currentFrame = taskBag.removeFirst();
                     DecimalFormat df = new DecimalFormat("#.##");
-                    if((taskBag.size()/originalBagSize)%5==0){
+                    if((taskBag.size()/originalBagSize)%500==0){
+                        //exibe a porcentagem de frames já tratados
                         System.out.println(df.format((1.0-(double)taskBag.size()/originalBagSize)*100) + "%");
                     }
                 }
             }
             if(currentFrame!=null){
+                //aloca numa matriz estática de resultado o frame tratado
                 fixedFrames[currentFrame.getIndex()] = this.treatFrame();
             }
-            this.currentFrame=null;
+            this.currentFrame=null; //reseta o valor de current frame para null para evitar conflitos de acesso
         }
     }
 }
